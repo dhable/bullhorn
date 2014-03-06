@@ -6,7 +6,7 @@ var _ = require("lodash"),
 
 
 var paths = {
-  source: ["app.js", "lib/**/*.js"],
+  source: ["lib/**/*.js"],
   specs: ["spec/**/*.js"]
 };
 
