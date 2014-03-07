@@ -17,6 +17,7 @@
     "convict": "~0.4.2",
     "twilio": "~1.6.0",
     "sendgrid": "~1.0.2",
-    "restify": "^2.6.3"
+    "restify": "^2.6.3",
+    "when": "^2.8.0"
   }
 }
