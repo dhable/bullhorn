@@ -1,0 +1,12 @@
+// This file is intended for private information that should not
+// be checked into git or otherwise published for a large number
+// of people to see. Items in this file can be overwritten in the
+// local files.
+{
+  "twilio": {
+    "authToken": "9549fcb1885ed8e6ac0d448dc0f30a1a"
+  },
+  "sendgrid": {
+    "key": "p8OQux5lK3t4W2ttRsgiDMtxMA"
+  }
+}

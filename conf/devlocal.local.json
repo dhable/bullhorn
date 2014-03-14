@@ -1,0 +1,8 @@
+// This configuration file should contain the same structuee as
+// the global file but is intended for overriding properties on
+// individual nodes in a running configuration. If you are only
+// running a single instance, this should remain empty.
+//
+// Do not put keys, passwords, etc. in this file. Those belong
+// in the private file.
+{}

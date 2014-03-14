@@ -1,0 +1,23 @@
+// The global configuration file should contain overrides for
+// properties that all instances of the service should use.
+//
+// Do not put keys, passwords, etc. in this file. Those belong
+// in the private file.
+{
+  "stats": {
+    "periodLength": 300,
+    "retentionLength": 300
+  },
+  "sms": {
+    "shortCode": "+16202704254"
+  },
+  "email": {
+    "from": "notification@jetway.io"
+  },
+  "twilio": {
+    "accountSid": "AC259b6c3ba019fe68d38eda2f66acab62"
+  },
+  "sendgrid": {
+    "user": "dhable"
+  }
+}
