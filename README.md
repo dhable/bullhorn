@@ -15,7 +15,8 @@ Real-time notification dispatcher written in node.js
   These include global.conf, private.conf and local.conf layered in that order.
   Check in the current conf used to bootstrap in dev mode
 
-* Build a service discovery module
+* [DONE] Build a service discovery module
+
   Read services from external file locaton.
 
 * Build routing rule file format and loader.
