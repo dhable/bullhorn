@@ -3,9 +3,11 @@
  *
  * Copyright (C) 2014 jetway.io. All rights reserved.
  */
-var conf = require("./lib/conf.js"),
+var socketIO = require("socket.io"),
+    restify = require("restify"),
+    conf = require("./lib/conf.js"),
     logger = require("./lib/logger.js"),
-    server = require("./lib/server.js");
+    routes = require("./lib/routes");
 
 
 // Log a preamble header to the logging system as a test of the
@@ -18,8 +20,19 @@ log.info("current working directory = %s", process.cwd());
 // Create new instances of the services that will be running to handle
 // requests.
 var port = conf().get("port"),
-    api = server();
+    server = restify.createServer({name: "bullhorn", version: "0.1.0"}),
+    io = socketIO.listen(server);
 
-api.listen(port, function() {
-  log.info("API is listening on port %s", port);
+io.configure(function() {
+  io.set("logger", logger("socket.io"));
+});
+
+server.use(restify.gzipResponse());
+server.use(restify.queryParser());
+server.use(restify.bodyParser());
+
+routes.bind(server, io);
+
+server.listen(port, function() {
+  log.info("bullhorn is now ready and listening on port %s", port);
 });
