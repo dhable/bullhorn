@@ -54,8 +54,14 @@ Not applicable to GET requests.
 
 #### Example Response Body ####
 ``` javascript
-{}
+{
+  "health": 0.351
+}
 ```
+The health value is a number between 0 and 1, where lower numbers indicate a
+healthier system. Think of the number as the load on the bullhorn instance at
+that given time.
+
 
 ### Send Notification ###
 
@@ -74,11 +80,30 @@ No specific headers.
 #### Example Request Body ####
 ``` javascript
 {
-  "org": "",
-  "to": ["", ""],
-  "msg": ""
+  "org": "4a0821d1-f88e-4898-a3e7-f745c42ba1fe",
+  "to": ["jetway:c98fbf4b-0d69-4df8-916d-1cce99a5ca15",
+         "jetway:3bd68a34-0a65-4cd1-a435-ac7df866ff94"],
+  "msg": "Hey, something cool happened.",
+  "template": "v1_notification"
 }
 ```
+
+The org parameter is the GUID of the users organization from the DB. We need
+this in order to determine the plan (e.g. paid or not) for the user and settings
+that might be applicable to all.
+
+The to parameter is an array of strings of the recipients. The strings follow the
+form of <type>:<id>. Currently the only supported type is "jetway" and that means
+the id will be a DB id for a given user. In the future we may expand this to allow
+bullhorn to use other types, such as sms, so we can send notifications without the
+need for a user record.
+
+The msg parameter is the details of the notification that is being sent. Different
+drains can shorten or format the message as appropriate for their use.
+
+The template parameter is optional and defines if the message should be placed
+inside of a larger template when sending. This will only be used if it's supported
+by the particular drain.
 
 #### Example Response Body ####
 No body content is returned.
