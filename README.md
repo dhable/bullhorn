@@ -2,39 +2,6 @@
 
 Real-time notification dispatcher written in node.js
 
-
-## Dan's Todo List Before Calling It Done ##
-
-* [SKIPPED] JSON schema validator and return mode for all ReST routes with bodies.
-
-  The validation logic is easy enough to write in JS and connect to restify. Adding
-  a schema isn't going to buy us much other than more complexity and bugs early on.
-
-* [DONE] Update conf schema to read from a series of static files.
-
-  These include global.conf, private.conf and local.conf layered in that order.
-  Check in the current conf used to bootstrap in dev mode
-
-* [DONE] Build a service discovery module
-
-  Read services from external file locaton.
-
-* Build routing rule file format and loader.
-
-* Watch routing rules, service discovery and conf files. Update in memory
-  values when files change.
-
-* [DONE] Build websocket/socket.io listener for notifications being send to the web
-  application. Need to register/unregister who's available.
-
-* Write more specs - at least get good level of unit test coverage.
-
-* Build test mode for socket.io
-
-* Deployment scripts / process
-  Consider vagrant at this time
-
-
 ## ReST API ##
 
 These are the following valid ReST APIs that bullhorn current supports.
