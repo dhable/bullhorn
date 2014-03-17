@@ -5,8 +5,10 @@ Real-time notification dispatcher written in node.js
 
 ## Dan's Todo List Before Calling It Done ##
 
-* JSON schema validator and return mode for all ReST routes with bodies.
-  Will make long term development and debugging easier.
+* [SKIPPED] JSON schema validator and return mode for all ReST routes with bodies.
+
+  The validation logic is easy enough to write in JS and connect to restify. Adding
+  a schema isn't going to buy us much other than more complexity and bugs early on.
 
 * [DONE] Update conf schema to read from a series of static files.
 
@@ -22,10 +24,12 @@ Real-time notification dispatcher written in node.js
 * Watch routing rules, service discovery and conf files. Update in memory
   values when files change.
 
-* Build websocket/socket.io listener for notifications being send to the web
+* [DONE] Build websocket/socket.io listener for notifications being send to the web
   application. Need to register/unregister who's available.
 
 * Write more specs - at least get good level of unit test coverage.
+
+* Build test mode for socket.io
 
 * Deployment scripts / process
   Consider vagrant at this time
@@ -235,3 +239,51 @@ Window is the only static field and reiterates the window defined in the request
 keys at the top level (e.g. "email") are named for every stat collection in the system and
 depends on the configuration. Values for those keys enumerate the bucket names and the values
 that fit within a given window.
+
+
+## socket.io API ##
+
+The socket.io API is contains two events that clients need to handle in order to start
+using the open WebSocket connection as a potential notification channel.
+
+
+### Connecting ###
+
+After importing the socket.io JavaScript library, the client needs to open a connection
+to the server on the /notifications namespace.
+``` javascript
+var notification = io.connect("http://<server address>/notifications");
+```
+
+
+### Registerting for Notifications ###
+
+Once a connection is established, the client needs to identify itself with the user's
+GUID. Without this identification, bullhorn won't be able to use this anonymous socket
+and will disconnect after a short time.
+
+To identify the socket, emit an event called "announce" which user is on the other end of
+the socket and what version the client is programmed against. Since the connection could
+be broken due to network hiccups, it's recommended to always emit the id event on connection.
+
+``` javascript
+notification.on("connect", function() {
+  notification.emit("announce", {user: "...", version: "0.1.0"});
+});
+```
+After emitting the id event, the client can just wait for notification events.
+
+
+### Handling Notifications ###
+
+All notifications are sent from the server on a "notification" event. The actual text
+of the notification is sent as the data associated with the event. The client then just
+needs to connect rendering/alerting code to the event. No reply needs to be sent.
+
+``` javascript
+notification.on("notification", function(msg) {
+  // You'd probably want to do something more elobrate than a standard
+  // alert box. This is just for demonstration purposes.
+  alert(msg);
+});
+```

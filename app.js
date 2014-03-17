@@ -31,7 +31,8 @@ server.use(restify.gzipResponse());
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-routes.bind(server, io);
+routes.bind(server);
+require("./lib/drains/web.js").bind(io);
 
 server.listen(port, function() {
   log.info("bullhorn is now ready and listening on port %s", port);
