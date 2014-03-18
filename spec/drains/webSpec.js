@@ -115,6 +115,42 @@ describe("The web drain module's", function() {
 
       expect(_.has(drain.clientMap, "guid-1234")).toBe(false);
     });
+
+    it("should do nothing if userGuid is null", function() {
+      drain.clientMap["guid-1234"] = ["a", "b", "c"];
+      drain.clearSocketFromList(null, 1);
+      expect(drain.clientMap["guid-1234"]).toEqual(["a", "b", "c"]);
+    });
+
+    it("should do nothing if userGuid is undefined", function() {
+      drain.clientMap["guid-1234"] = ["a", "b", "c"];
+      drain.clearSocketFromList(undefined, 1);
+      expect(drain.clientMap["guid-1234"]).toEqual(["a", "b", "c"]);
+    });
+
+    it("should do nothing if socketIndex is null", function() {
+      drain.clientMap["guid-1234"] = ["a", "b", "c"];
+      drain.clearSocketFromList("guid-1234", null);
+      expect(drain.clientMap["guid-1234"]).toEqual(["a", "b", "c"]);
+    });
+
+    it("should do nothing if socketIndex is undefined", function() {
+      drain.clientMap["guid-1234"] = ["a", "b", "c"];
+      drain.clearSocketFromList("guid-1234", undefined);
+      expect(drain.clientMap["guid-1234"]).toEqual(["a", "b", "c"]);
+    });
+
+    it("should do nothing if socketIndex is not a number", function() {
+      drain.clientMap["guid-1234"] = ["a", "b", "c"];
+      drain.clearSocketFromList("guid-1234", "1");
+      expect(drain.clientMap["guid-1234"]).toEqual(["a", "b", "c"]);
+    });
+
+    it("should do nothing if socketIndex is outside the bounds of the array", function() {
+      drain.clientMap["guid-1234"] = ["a", "b", "c"];
+      drain.clearSocketFromList("guid-1234", 3);
+      expect(drain.clientMap["guid-1234"]).toEqual(["a", "b", "c"]);
+    });
   });
 
 });
