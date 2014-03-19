@@ -2,6 +2,33 @@
 
 Real-time notification dispatcher written in node.js
 
+## Running The Service ##
+
+To run the service locally in a production like environment, you'll need to
+install VirtualBox and Vagrant. Once installed, you should be able to simply
+type
+
+```
+vagrant up
+```
+
+This will build an Ubuntu 12.04 TLS server instance, install node.js, install
+forever and then start the bullhorn server. Due to port forwarding, the bullhorn
+instance will be bound to port 3001 on your local machine.
+
+If you'd like to access the box to inspect log files or interact with the service,
+type
+
+```
+vagrant ssh
+```
+
+When you're done, you can tear down the virtual environment with
+
+```
+vagrant destroy
+```
+
 ## ReST API ##
 
 These are the following valid ReST APIs that bullhorn current supports.
