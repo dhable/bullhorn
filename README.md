@@ -88,15 +88,12 @@ No specific headers.
 }
 ```
 
-The org parameter is the GUID of the users organization from the DB. We need
-this in order to determine the plan (e.g. paid or not) for the user and settings
-that might be applicable to all.
-
 The to parameter is an array of recipient. Each recipient is an object literal that
 can contain two properties - type and id. Type is a hint to bullhorn which data source
 it should use to look up the id with. The id is the primary identifier for the recipient.
 Valid types include: user, org, email, or sms. In all cases, you should try to address
-recipients using the user or org id instead of a raw SMS number of email address.
+recipients using the user or org id instead of a raw SMS number of email address. currently
+supported types are user, email, sms and web. Org support is currently not planned.
 
 The msg parameter is the details of the notification that is being sent. Different
 drains can shorten or format the message as appropriate for their use.
@@ -236,12 +233,135 @@ keys at the top level (e.g. "email") are named for every stat collection in the 
 depends on the configuration. Values for those keys enumerate the bucket names and the values
 that fit within a given window.
 
+### Fetch User Notificaton Preferences ###
+
+This method will return the a user's current notification preferences as they are stored
+in Bullhorn.
+
+#### Example Request ####
+```
+GET /profiles/c98fbf4b-0d69-4df8-916d-1cce99a5ca15
+```
+
+#### Example Request Headers ####
+No specific headers.
+
+#### Example Request Body ####
+Not applicable to GET requests.
+
+#### Example Response Body ####
+```javascript
+[
+  {"drain":"web","id":"implied","exclusive":true},
+  {"drain":"sms","id":"4142322501","verified":true,"exclusive":false},
+  {"drain":"email","id":"dan@jetway.io","verified":true,"exclusive":false}
+]
+```
+
+### Save User Notification Preferences ###
+
+This method will create or update a user's current notification preferences. This operation is
+semi-idempotent so the entire collection will need to be specified on each operation.
+
+#### Example Request ####
+```
+PUT /profiles/c98fbf4b-0d69-4df8-916d-1cce99a5ca15
+```
+
+#### Example Request Headers ####
+No specific headers.
+
+#### Example Request Body ####
+```javascript
+[
+  {"drain":"web","id":"implied","exclusive":true},
+  {"drain":"sms","id":"4142322501","verified":true,"exclusive":false},
+  {"drain":"email","id":"dan@jetway.io","verified":true,"exclusive":false}
+]
+```
+
+#### Example Response Body ####
+No specific body.
+
+
+
+### Delete User Notification Preferences ###
+
+This method will delete a user's notification preferences and any data
+that is a child of the user entity (associations, etc).
+
+#### Example Request ####
+```
+DELETE /profiles/c98fbf4b-0d69-4df8-916d-1cce99a5ca15
+```
+
+#### Example Request Headers ####
+No specific headers.
+
+#### Example Request Body ####
+Not applicable to DELETE requests.
+
+#### Example Response Body ####
+No specific body.
+
+
+
+### Fetch A User's Associations ###
+
+This method will return a list of all the organizations that the user
+is currently assoicated with.
+
+#### Example Request ####
+```
+GET /profiles/c98fbf4b-0d69-4df8-916d-1cce99a5ca15/associations
+```
+
+#### Example Request Headers ####
+No specific headers.
+
+#### Example Request Body ####
+Not applicable to GET requests.
+
+#### Example Response Body ####
+```javascript
+[
+  "c4add3e6-e183-497f-a738-e3f4793211f0",
+  "1cf7f7bd-1c64-4575-b271-0398c95dbddd",
+  "460a0a26-64a9-4ee8-81d1-087421f37048"
+]
+```
+
+### Save A User's Associations ###
+
+This method will create or update a user's current organization associations. This operation
+is semi-idempotent so the entire collection will need to be specified on each operation.
+
+#### Example Request ####
+```
+PUT /profiles/c98fbf4b-0d69-4df8-916d-1cce99a5ca15/associations
+```
+
+#### Example Request Headers ####
+No specific headers.
+
+#### Example Request Body ####
+```javascript
+[
+  "c4add3e6-e183-497f-a738-e3f4793211f0",
+  "1cf7f7bd-1c64-4575-b271-0398c95dbddd",
+  "460a0a26-64a9-4ee8-81d1-087421f37048"
+]
+```
+
+#### Example Response Body ####
+No specific body.
+
+
 
 ## socket.io API ##
 
 The socket.io API is contains two events that clients need to handle in order to start
 using the open WebSocket connection as a potential notification channel.
-
 
 ### Connecting ###
 
