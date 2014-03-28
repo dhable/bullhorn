@@ -113,57 +113,37 @@ describe("The stats module", function() {
   describe("record function", function() {
     var collector;
 
-    beforeEach(function() {
-      collector = new stats.Collector();
-    });
-
     it("should add a new bucket with values if one doesn't exist", function() {
-      collector.record({
-        type: stats.Type.Count,
-        calls: 11
-      });
+      collector = new stats.Collector({calls: stats.Type.Count});
+      collector.record({calls: 11});
       expect(collector.current.buckets.calls).toBe(11);
     });
 
     it("should apply the type function to any existing value and argument", function() {
+      collector = new stats.Collector({calls: stats.Type.Count});
       collector.current.buckets.calls = 11;
 
-      collector.record({
-        type: stats.Type.Count,
-        calls: 1
-      });
+      console.log(collector.current.buckets);
 
+      collector.record({calls: 1});
+
+      console.log(collector.current.buckets);
       expect(collector.current.buckets.calls).toBe(12);
     });
 
     it("should process all defined buckets on a single object argument", function() {
-      collector.record({
-        type: stats.Type.Count,
-        calls: 2,
-        errors: 2
-      });
+      collector = new stats.Collector({calls: stats.Type.Count, errors: stats.Type.Count});
+      collector.record({calls: 2, errors: 2});
 
       expect(collector.current.buckets.calls).toBe(2);
       expect(collector.current.buckets.errors).toBe(2);
     });
 
-    it("should process all defined arguments as separate events", function() {
-      collector.record(
-        {type: stats.Type.Count, calls: 1},
-        {type: stats.Type.Midpoint, time: 0.234});
-
-      expect(collector.current.buckets.calls).toBe(1);
-      expect(collector.current.buckets.time).toBe(0.117);
-    });
-
     it("should roll old time slices before recording new stats", function() {
+      collector = new stats.Collector({calls: stats.Type.Count});
       collector.current.buckets.calls = 10;
       collector.current.end = Date.now() - 1;
-
-      collector.record({
-        type: stats.Type.Count,
-        calls: 1
-      });
+      collector.record({calls: 1});
 
       expect(collector.slices.length).toBe(1);
       expect(collector.slices[0].buckets.calls).toBe(10);
@@ -171,26 +151,22 @@ describe("The stats module", function() {
     });
 
     it("should save memory by not rolling the current slice if the bucket is empty", function() {
+      collector = new stats.Collector({calls: stats.Type.Count});
       collector.current.end = Date.now() - 1;
 
-      collector.record({
-        type: stats.Type.Count,
-        calls: 1
-      });
+      collector.record({calls: 1});
 
       expect(collector.slices.length).toBe(0);
       expect(collector.current.buckets.calls).toBe(1);
     });
 
     it("should purge slices if their TTL is due", function() {
+      collector = new stats.Collector({calls: stats.Type.Count});
       collector.current.buckets.calls = 10;
       collector.current.end = Date.now() - 10;
       collector.current.ttl = Date.now() - 1;
 
-      collector.record({
-        type: stats.Type.Count,
-        calls: 1
-      });
+      collector.record({calls: 1});
 
       expect(collector.slices.length).toBe(0);
       expect(collector.current.buckets.calls).toBe(1);
