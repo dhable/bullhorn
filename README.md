@@ -194,45 +194,6 @@ Not applicable to GET requests.
 }
 ```
 
-### Fetch Current Notification Stats ###
-
-This method is intended to be used by devlopers and operation staff to view the
-information on the notifications that have been flowing through the system.
-
-#### Example Request ####
-```
-GET /ops/stats?window=5
-```
-
-The window parameter defines how many minutes back to roll up notification statstics
-for when generating the results. If not specified, it will include all statistics that
-are currently in memory as defined by the stats.retentionLength configuration parameter.
-These stats will be collapsed according to stats.periodLength and some granulatiry will
-be lost.
-
-#### Example Request Headers ####
-No specific headers.
-
-#### Example Request Body ####
-Not applicable to GET requests.
-
-#### Example Response Body ####
-``` javascript
-{
-  "window": "5",
-  "email": {
-    "requests": 1232,
-    "time": 0.324,
-    "errors": 1
-  }
-}
-```
-
-Window is the only static field and reiterates the window defined in the request. The other
-keys at the top level (e.g. "email") are named for every stat collection in the system and
-depends on the configuration. Values for those keys enumerate the bucket names and the values
-that fit within a given window.
-
 ### Fetch User Notificaton Preferences ###
 
 This method will return the a user's current notification preferences as they are stored
