@@ -7,13 +7,32 @@
 # on v0.6.x.
 $installNode = <<EOL
 apt-get update
-apt-get install --assume-yes python-software-properties python g++ make
+apt-get install --assume-yes python-software-properties python g++ make git
 add-apt-repository --yes ppa:chris-lea/node.js
 apt-get update
 apt-get install --assume-yes nodejs
+npm install -g forever
 EOL
 
 
+# Shell script to install and start the statsd monitoring package
+# from github. Will log output to the stdout.log file.
+$installStatsd = <<EOL
+mkdir -p /opt/statsd
+mkdir -p /var/log/statsd
+git clone --depth 1 https://github.com/etsy/statsd.git /opt/statsd
+cd /opt/statsd
+
+cat << EOF > conf.js
+{port: 8125, backends: ["./backends/console"]}
+EOF
+
+forever start -l /var/log/statsd/forever.log -o /var/log/statsd/stdout.log \
+              -e /var/log/statsd/stderr.log --pidFile statsd.pid stats.js conf.js
+EOL
+
+
+# Shell script to start the bullhorn server using forever.
 $startBullhorn = <<EOL
 mkdir -p /var/log/jetway/bullhorn
 cd /opt/jetway/bullhorn
@@ -35,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/opt/jetway/bullhorn"
 
   config.vm.provision :shell, :inline => $installNode
-  config.vm.provision :shell, :inline => "npm install -g forever"
+  config.vm.provision :shell, :inline => $installStatsd
   config.vm.provision :shell, :inline => $startBullhorn
 
 end
