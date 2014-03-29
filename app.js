@@ -19,7 +19,7 @@ log.info("current working directory = %s", process.cwd());
 
 // Create new instances of the services that will be running to handle
 // requests.
-var port = conf().get("port"),
+var port = conf.get("port"),
     server = restify.createServer({name: "bullhorn", version: "0.1.0"}),
     io = socketIO.listen(server);
 
