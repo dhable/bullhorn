@@ -24,7 +24,7 @@ var port = conf.get("port"),
     io = socketIO.listen(server);
 
 io.configure(function() {
-  io.set("logger", logger("socket.io"));
+  // io.set("logger", logger("socket.io"));
 });
 
 server.use(restify.gzipResponse());
