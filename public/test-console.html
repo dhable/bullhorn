@@ -32,6 +32,10 @@
                });
       } // end of initUserData
 
+      function appendToSocketLog(txt) {
+        var ts = new Date();
+        $("#inboundNotifications").append(ts.toString() + " - " + txt + "\n");
+      }
 
       function connectToBullhorn(event) {
         event.preventDefault();
@@ -41,16 +45,47 @@
           return;
         }
 
+        appendToSocketLog("connecting...");
         var socket = io.connect("/notifications");
         socket.on("connect", function() {
           socket.emit("announce", {user: CONSOLE.userGuid, version: "0.1.0"});
+          CONSOLE.connected = true;
+          appendToSocketLog("connected");
+
+          socket.on("notification", function(msg) {
+             appendToSocketLog(msg);
+          });
         }); 
       }
 
+      function sendNotification(event) {
+        event.preventDefault();
+
+        if(!CONSOLE.connected) {
+          alert("need to run step 1 and 2 first");
+          return;
+        }
+
+        $.ajax({
+                 type: "POST",
+                 url: "/notifications",
+                 contentType: "application/json",
+                 data: JSON.stringify({
+                   to: [
+                     {type: "user", id: CONSOLE.userGuid}
+                   ], 
+                   msg: $("#notificationText").val()
+                 })
+               })
+         .fail(function(xhr, status) {
+                 alert("Failed to send notification: " + status);
+               })
+      }
 
       $(document).ready(function() {
-        $("#createUser").on("click", initUserData);
+        $("#initUser").on("click", initUserData);
         $("#connect").on("click", connectToBullhorn);
+        $("#sendNotification").on("click", sendNotification);
       });
     </script>
   </head>
@@ -59,23 +94,26 @@
     <h1>bullhorn test console</h1>
 
     <section>
-      <h2>Step 1 - Create User Guid Notification Preferences</h2>
+      <h2>Step 1 - Initialize User Guid</h2>
       <form>
-         User Guid: <input type="text" id="userGuid" name="userGuid"/>
-         <button id="createUser">Create User Preferences</button>
+         User Guid: <input type="text" id="userGuid" size="60"/>
+         <button id="initUser">Initalize</button>
       </form>
     </section>
 
     <section>
       <h2>Step 2 - Connect to WebSocket</h2>
       <form>
-        <button id="connect">Connect to Bullhorn</button>
+        <button id="connect">Connect to Bullhorn</button><br/>
+        <textarea id="inboundNotifications" rows="10" cols="80" readonly="true"></textarea>
       </form>
     </section>
 
     <section>
       <h2>Step 3 - Send Notification</h2>
       <form>
+        <input type="text" id="notificationText" size="60"/>
+        <button id="sendNotification">Send</button>
       </form>
     </section>
   </body>
