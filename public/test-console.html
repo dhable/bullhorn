@@ -2,10 +2,81 @@
 <html>
   <head>
     <title>bullhorn test console</title>
+    <style>
+      section {
+        border: 2px solid Black;
+        margin: 1.5em 0;
+        padding: 0 0.5em 1em 0.5em;
+      }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-2.0.2.js"></script>
+    <script>
+      var CONSOLE = {};
+
+      function initUserData(event) {
+        event.preventDefault();
+       
+        CONSOLE.userGuid = $("#userGuid").val();
+        $.ajax({type: "PUT", 
+                url: "/profiles/" + CONSOLE.userGuid,
+                contentType: "application/json",
+                data: JSON.stringify([{drain: "web", id: "implied", exclusive: true}])
+               })
+         .done(function() {
+                 CONSOLE.initRan = true;
+                 alert("user initialized");
+               })
+         .fail(function(xhr, status) {
+                 alert("initializion failed: " + status);
+               });
+      } // end of initUserData
+
+
+      function connectToBullhorn(event) {
+        event.preventDefault();
+
+        if(!CONSOLE.initRan) {
+          alert("need to run step 1 first");
+          return;
+        }
+
+        var socket = io.connect("/notifications");
+        socket.on("connect", function() {
+          socket.emit("announce", {user: CONSOLE.userGuid, version: "0.1.0"});
+        }); 
+      }
+
+
+      $(document).ready(function() {
+        $("#createUser").on("click", initUserData);
+        $("#connect").on("click", connectToBullhorn);
+      });
+    </script>
   </head>
 
   <body>
     <h1>bullhorn test console</h1>
 
+    <section>
+      <h2>Step 1 - Create User Guid Notification Preferences</h2>
+      <form>
+         User Guid: <input type="text" id="userGuid" name="userGuid"/>
+         <button id="createUser">Create User Preferences</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Step 2 - Connect to WebSocket</h2>
+      <form>
+        <button id="connect">Connect to Bullhorn</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Step 3 - Send Notification</h2>
+      <form>
+      </form>
+    </section>
   </body>
 </html>
