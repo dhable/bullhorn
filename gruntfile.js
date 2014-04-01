@@ -1,4 +1,7 @@
 module.exports = function(grunt) {
+  "use strict";
+  require("load-grunt-tasks")(grunt);
+  
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
@@ -25,12 +28,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
-  grunt.loadNpmTasks("grunt-contrib-yuidoc");
-  grunt.loadNpmTasks("grunt-jasmine-node");
-  grunt.loadNpmTasks('grunt-nsp-package');
 
   grunt.registerTask("setup", ["yuidoc"]);
   grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
