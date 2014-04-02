@@ -17,7 +17,7 @@ EOL
 
 # Shell script to install and start the statsd monitoring package
 # from github. Will log output to the stdout.log file.
-$installStatsd = <<EOL
+$startStatsd = <<EOL
 mkdir -p /opt/statsd
 mkdir -p /var/log/statsd
 git clone --depth 1 https://github.com/etsy/statsd.git /opt/statsd
@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/opt/jetway/bullhorn"
 
   config.vm.provision :shell, :inline => $installNode
-  config.vm.provision :shell, :inline => $installStatsd
+  config.vm.provision :shell, :inline => $startStatsd
   config.vm.provision :shell, :inline => $startBullhorn
 
 end
