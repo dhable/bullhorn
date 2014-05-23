@@ -126,12 +126,12 @@ server.
 
 #### Example Request ####
 ```
-POST /keys
+POST /applications/abc.key
 ```
 
 #### Example Request Body ####
 ```
-organization=123&application=abc
+organization=123&timestamp=1234567828
 ```
 
 #### Example Response Body ####
@@ -150,7 +150,7 @@ does not change their values.
 
 #### Example Request ####
 ```
-GET /keys/123/abc
+GET /applications/abc.key
 ```
 
 #### Example Response Body ####
@@ -164,18 +164,81 @@ GET /keys/123/abc
 
 ### Application - Fetch Log Info ###
 
+Retrieve API call log data for inspection by a user. This data can be filtered to help
+users inspect and debug their problems with our API. Will limit the number of records
+returned to 100.
+
+#### Example Request ####
+```
+GET /applications/abc.log
+```
+  * since - The unix timestamp to search starting from (inclusive).
+  * until - The unix timestamp to search until (inclusive).
+  * status - Limit the responses to either "success" or "failure" records.
+
+#### Example Response Body ####
+```javascript
+[
+   {
+      "timestamp": 123458373,
+      "status": "success",
+      "endpoint": "/notification",
+      "request": "{...}",
+      "response": "{...}"
+   },
+   ...
+]
+```
+
+### Recipient - Save ###
+
+Create or update a recipient notification preference record for an individual. There
+can only be a single web record but there can be multiple SMS or email addresses assuming
+that the id is unique.
+
+#### Example Request ####
+```
+PUT /applications/abc/recipients/123455
+```
+
+#### Example Request Body ####
+```javascript
+[
+  {"drain":"web","id":"implied","exclusive":true},
+  {"drain":"sms","id":"4142322501","verified":true,"exclusive":false},
+  {"drain":"email","id":"dan@jetway.io","verified":true,"exclusive":false}
+]
+```
 
 
+### Recipient - Fetch ###
+
+Retrieve the recipient notification preference record for an individual. If a there is no
+record, the API will return a 404 error.
+
+#### Example Request ####
+```
+GET /applications/abc/recipients/123455
+```
+
+#### Example Response Body ####
+```javascript
+[
+  {"drain":"web","id":"implied","exclusive":true},
+  {"drain":"sms","id":"4142322501","verified":true,"exclusive":false},
+  {"drain":"email","id":"dan@jetway.io","verified":true,"exclusive":false}
+]
+```
 
 
+### Recipient - Delete ###
 
+Delete the recipient notification preference record for an individual.
 
-
-
-
-
-
-
+#### Example Request ####
+```
+DELETE /applications/abc/recipients/123455
+```
 
 
 ### Send Notification ###
@@ -274,10 +337,6 @@ No specific headers.
 
 #### Example Request Body ####
 ```javascript
-[
-  {"drain":"web","id":"implied","exclusive":true},
-  {"drain":"sms","id":"4142322501","verified":true,"exclusive":false},
-  {"drain":"email","id":"dan@jetway.io","verified":true,"exclusive":false}
 ]
 ```
 
