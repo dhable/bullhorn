@@ -20,8 +20,7 @@
   "dependencies": {
     "async": "^0.2.10",
     "convict": "~0.4.2",
-    "leveldown": "^0.10.2",
-    "levelup": "^0.18.2",
+    "firebase": "^1.0.17",
     "lodash": "~2.4.1",
     "node-statsd": "0.0.7",
     "restify": "^2.6.3",
