@@ -28,6 +28,7 @@ io.configure(function() {
 });
 
 server.use(restify.gzipResponse());
+server.use(restify.authorizationParser());
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
