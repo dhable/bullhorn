@@ -30,11 +30,11 @@
     "firebase": "^1.0.17",
     "lodash": "~2.4.1",
     "node-statsd": "0.0.7",
+    "node-uuid": "^1.4.1",
     "restify": "^2.8.1",
     "rsvp": "^3.0.8",
     "sendgrid": "~1.0.5",
     "socket.io": "^0.9.16",
-    "twilio": "~1.6.0",
-    "uuid-js": "^0.7.4"
+    "twilio": "~1.6.0"
   }
 }

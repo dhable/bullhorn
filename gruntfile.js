@@ -2,14 +2,14 @@
 var initTestData = function(grunt) {
    var rsvp = require("rsvp"),
        _ = require("lodash"),
-       uuid = require("uuid-js"),
+       uuid = require("node-uuid"),
        dao = require("./lib/dao"),
        security = require("./lib/routes/security.js");
 
    return function() {
       var done = this.async(),
           internalId,
-          externalId = uuid.create(1).hex;
+          externalId = uuid.v1();
           
       grunt.log.writeln("initializing firebase with sample set of test data");
       dao.Application.create({
