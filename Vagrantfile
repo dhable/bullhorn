@@ -15,6 +15,15 @@ npm install -g forever
 EOL
 
 
+$installRabbitMQ = <<EOL
+add-apt-repository 'deb http://www.rabbitmq.com/debian/ testing main'
+wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+apt-key add rabbitmq-signing-key-public.asc 
+apt-get update
+apt-get install --assume-yes rabbitmq-server
+EOL
+
+
 # Shell script to install and start the statsd monitoring package
 # from github. Will log output to the stdout.log file.
 $startStatsd = <<EOL
@@ -51,9 +60,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
   config.vm.network "forwarded_port", guest: 3000, host: 3001
+  config.vm.network "forwarded_port", guest: 5672, host: 5672
   config.vm.synced_folder ".", "/opt/jetway/bullhorn"
 
   config.vm.provision :shell, :inline => $installNode
+  config.vm.provision :shell, :inline => $installRabbitMQ
   config.vm.provision :shell, :inline => $startStatsd
   config.vm.provision :shell, :inline => $startBullhorn
 
