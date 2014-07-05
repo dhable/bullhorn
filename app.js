@@ -32,3 +32,15 @@ services.forEach(function(service) {
 
    log.debug("service start execution for %s took %s ms", service.name, Date.now() - start);
 });
+
+
+process.once("SIGINT", function() {
+   try {
+      services.forEach(function(service) {
+         service.stop();
+      });
+   }
+   catch(err) {
+      // eat the error
+   }
+});
