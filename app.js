@@ -3,38 +3,32 @@
  *
  * Copyright (C) 2014 jetway.io. All rights reserved.
  */
-var socketIO = require("socket.io"),
-    restify = require("restify"),
-    conf = require("./lib/conf.js"),
-    logger = require("./lib/logger.js"),
-    routes = require("./lib/routes");
+var conf = require("./lib/conf.js"),
+    log = require("./lib/logger.js")("boot");
 
 
 // Log a preamble header to the logging system as a test of the
 // logging system and to show in the logs where a fresh state occured.
-var log = logger("app");
 log.info("Bootstrapping jetway.io Bullhorn, version 0.1.0");
 log.info("current working directory = %s", process.cwd());
 
 
-// Create new instances of the services that will be running to handle
-// requests.
-var port = conf.get("port"),
-    server = restify.createServer({name: "bullhorn", version: "0.1.0"}),
-    io = socketIO.listen(server);
+var services = [ 
+   require("./lib/services/api"),
+   require("./lib/services/pigeon")
+];
 
-io.configure(function() {
-  // io.set("logger", logger("socket.io"));
-});
+services.forEach(function(service) {
+   var start = Date.now();
 
-server.use(restify.gzipResponse());
-server.use(restify.authorizationParser());
-server.use(restify.queryParser());
-server.use(restify.bodyParser());
+   try {
+      log.info("attempting start of %s", service.name);
+      service.start(conf);
+   }
+   catch(err) {
+      log.error("failed to start %s [message = %s]", service.name, err.message);
+      // TODO: Emit alarm that service failed to start
+   }
 
-routes.bind(server);
-require("./lib/drains/web.js").bind(io);
-
-server.listen(port, function() {
-  log.info("bullhorn is now ready and listening on port %s", port);
+   log.debug("service start execution for %s took %s ms", service.name, Date.now() - start);
 });
