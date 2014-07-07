@@ -21,6 +21,9 @@ wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
 apt-key add rabbitmq-signing-key-public.asc 
 apt-get update
 apt-get install --assume-yes rabbitmq-server
+rabbitmqctl add_user jetway jetway
+rabbitmqctl set_user_tags jetway administrator
+rabbitmqctl set_permissions jetway '.*' '.*' '.*'
 EOL
 
 
