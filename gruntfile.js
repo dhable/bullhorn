@@ -4,7 +4,8 @@ var initTestData = function(grunt) {
        _ = require("lodash"),
        uuid = require("node-uuid"),
        dao = require("./lib/dao"),
-       security = require("./lib/services/api/routes/security.js");
+       conf = require("./lib/conf.js"),
+       security = require("./lib/security");
 
    return function() {
       var done = this.async(),
@@ -77,7 +78,7 @@ var initTestData = function(grunt) {
             })
          ]);
       }).then(function(recipients) {
-         var secretKey = security.generateKey(externalId);
+         var secretKey = security.generateKey(conf.get("crypto.salts.apikey"), externalId);
 
          grunt.log.writeln("\n\nApplication GUID => " + internalId);
          grunt.log.writeln("Alice Doe GUID => " + recipients[0].id);
