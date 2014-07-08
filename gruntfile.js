@@ -4,7 +4,7 @@ var initTestData = function(grunt) {
        _ = require("lodash"),
        uuid = require("node-uuid"),
        dao = require("./lib/dao"),
-       security = require("./lib/routes/security.js");
+       security = require("./lib/services/api/routes/security.js");
 
    return function() {
       var done = this.async(),

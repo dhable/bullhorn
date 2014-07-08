@@ -1,4 +1,4 @@
-var security = require("../../lib/routes/security.js");
+var security = require("../../../../lib/services/api/routes/security.js");
 
 
 describe("The route security module", function() {
