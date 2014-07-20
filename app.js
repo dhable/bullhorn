@@ -15,7 +15,8 @@ log.info("current working directory = %s", process.cwd());
 
 var services = [ 
    require("./lib/services/api"),
-   require("./lib/services/pigeon")
+   require("./lib/services/pigeon"),
+   require("./lib/services/pigeon-sms")
 ];
 
 services.forEach(function(service) {
