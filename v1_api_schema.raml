@@ -104,10 +104,16 @@ version: v1
                     application/json:
                         example: |
                             {
-                                "methods": [
-                                    {"channel": "sms", "id": "12065551212"},
-                                    {"channel": "email", "id": "user@gmail.com"}
-                                ]
+                               "firstName": "John",
+                               "lastName": "Doe",
+                               "timeZone": "-8",
+                               "drains": [
+                                 {
+                                    "type": "sms",
+                                    "for": ["password-reset", "alerts"],
+                                    "addr": "12065551212"
+                                 }
+                               ]
                             }
                 responses:
                     200:
@@ -134,7 +140,17 @@ version: v1
                         body:
                             application/json:
                                 example: |
-                                    {"recipientCount": 123}
+                                    {
+                                       "count": 123,
+                                       "recipients": [
+                                          {
+                                             "id": "e399c87f12a3c817349eeb76241cbb81",
+                                             "lastName": "John",
+                                             "firstName": "Doe",
+                                             "timeZone": "-8"
+                                          }
+                                       ]
+                                    }
                     404:
                         body:
                             application/json:
@@ -146,6 +162,21 @@ version: v1
                         Retrieve the current notification settings for a registered recipient.                        
                     responses:
                         200:
+                           body:
+                              application/json:
+                                 example: |
+                                    {
+                                        "firstName": "John",
+                                        "lastName": "Doe",
+                                        "timeZone": "-8",
+                                        "drains": [
+                                          {
+                                             "type": "sms",
+                                             "for": ["password-reset", "alerts"],
+                                             "addr": "12065551212"
+                                          }
+                                       ]
+                                    }
                         404:
                             body:
                                 application/json:
@@ -157,12 +188,18 @@ version: v1
                     body:
                         application/json:
                             example: |
-                                {
-                                    "methods": [
-                                        {"channel": "sms", "id": "12065551212"},
-                                        {"channel": "email", "id": "user@gmail.com"}
+                                 {
+                                     "firstName": "John",
+                                     "lastName": "Doe",
+                                     "timeZone": "-8",
+                                     "drains": [
+                                       {
+                                          "type": "sms",
+                                          "for": ["password-reset", "alerts"],
+                                          "addr": "12065551212"
+                                       }
                                     ]
-                                }                    
+                                 }
                     responses:
                         200:
                         404:
@@ -190,10 +227,12 @@ version: v1
                 body:
                     application/json:
                         example: |
-                            {
-                                "to": ["e399c87f12a3c817349eeb76241cbb81"],
-                                "msg": "Body of the notification"
-                            }
+                           {
+                              "to": "",
+                              "msg": "",
+                              "subject": "",
+                              "domain": ""
+                           }
                 responses:
                     202:
                         body:
