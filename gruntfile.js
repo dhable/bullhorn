@@ -11,8 +11,8 @@ var initTestData = function(grunt) {
       var done = this.async(),
           domainId,
           accessKeyId = uuid.v1(),
-          recipient1Id = uuid.v1(),
-          recipient2Id = uuid.v1();
+          profile1Id = uuid.v1(),
+          profile2Id = uuid.v1();
           
       grunt.log.writeln("initializing firebase with sample set of test data");
       dao.Domain.create({
@@ -21,7 +21,7 @@ var initTestData = function(grunt) {
          accessKey: accessKeyId,
          numRecipients: 1,
          numMessages: 0,
-         recipients: [recipient1Id, recipient2Id],
+         profiles: [profile1Id, profile2Id],
          channels: [
             {
                id: "newsletter",
@@ -45,7 +45,7 @@ var initTestData = function(grunt) {
       }).then(function() {
          return rsvp.all([
             dao.Profile.update({
-               id: recipient1Id,
+               id: profile1Id,
                domain: domainId,
                firstName: "Alice",
                lastName: "Doe",
@@ -66,7 +66,7 @@ var initTestData = function(grunt) {
                ]
             }),
             dao.Profile.update({
-               id: recipient2Id,
+               id: profile2Id,
                domain: domainId,
                firstName: "Bob",
                lastName: "Doe",
