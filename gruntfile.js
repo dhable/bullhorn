@@ -10,7 +10,9 @@ var initTestData = function(grunt) {
    return function() {
       var done = this.async(),
           internalId,
-          externalId = uuid.v1();
+          externalId = uuid.v1(),
+          recipient1Id = uuid.v1(),
+          recipient2Id = uuid.v1();
           
       grunt.log.writeln("initializing firebase with sample set of test data");
       dao.Application.create({
@@ -19,15 +21,16 @@ var initTestData = function(grunt) {
          externalId: externalId,
          numRecipients: 1,
          numMessages: 0,
+         recipients: [recipient1Id, recipient2Id],
          channels: [
             {
-               id: 1,
+               id: "newsletter",
                name: "Newsletter",
                desc: "Our weekly list of tips and tricks for using the app.",
                urgent: false
             },
             {
-               id: 2,
+               id: "pwreset",
                name: "Password Reset",
                desc: "Notifications sent every time you reset your password.",
                urgent: true
@@ -41,38 +44,37 @@ var initTestData = function(grunt) {
          });
       }).then(function() {
          return rsvp.all([
-            dao.Recipient.create(internalId, {
+            dao.Recipient.update(internalId, {
+               id: recipient1Id,
                firstName: "Alice",
                lastName: "Doe",
                timeZone: -8,
                drains: [
                   {
+                     addr: "adoe@gmail.com",
                      type: "email",
                      verified: true,
-                     "for": [1],
-                     addr: "adoe@gmail.com",
-                     useSmartDND: true
+                     "for": ["pwreset", "newsletter"]
                   },
                   {
+                     addr: "12065551212",
                      type: "sms",
                      verified: false,
-                     "for": [1, 2],
-                     addr: "12065551212",
-                     useSmartDND: false
+                     "for": ["pwreset"]
                   }
                ]
             }),
-            dao.Recipient.create(internalId, {
+            dao.Recipient.update(internalId, {
+               id: recipient2Id,
                firstName: "Bob",
                lastName: "Doe",
                timeZone: -6,
                drains: [
                   {
+                     addr: "19175551212",
                      type: "sms",
                      verified: true,
-                     "for": [1, 2],
-                     addr: "19175551212",
-                     useSmartDND: true
+                     "for": ["pwreset"]
                   }
                ]
             })
