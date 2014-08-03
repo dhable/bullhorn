@@ -44,7 +44,7 @@ var initTestData = function(grunt) {
          });
       }).then(function() {
          return rsvp.all([
-            dao.Recipient.update({
+            dao.Profile.update({
                id: recipient1Id,
                domain: internalId,
                firstName: "Alice",
@@ -65,7 +65,7 @@ var initTestData = function(grunt) {
                   }
                ]
             }),
-            dao.Recipient.update({
+            dao.Profile.update({
                id: recipient2Id,
                domain: internalId,
                firstName: "Bob",
@@ -81,12 +81,12 @@ var initTestData = function(grunt) {
                ]
             })
          ]);
-      }).then(function(recipients) {
+      }).then(function(profiles) {
          var secretKey = security.generateKey(conf.get("crypto.salts.apikey"), externalId);
 
          grunt.log.writeln("\n\nApplication GUID => " + internalId);
-         grunt.log.writeln("Alice Doe GUID => " + recipients[0].id);
-         grunt.log.writeln("Bob Doe GUID => " + recipients[1].id);
+         grunt.log.writeln("Alice Doe GUID => " + profiles[0].id);
+         grunt.log.writeln("Bob Doe GUID => " + profiles[1].id);
          grunt.log.writeln("API Info:");
          grunt.log.writeln("   ID => " + externalId );
          grunt.log.writeln("   Secret => " + secretKey);
