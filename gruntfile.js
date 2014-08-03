@@ -9,8 +9,8 @@ var initTestData = function(grunt) {
 
    return function() {
       var done = this.async(),
-          internalId,
-          externalId = uuid.v1(),
+          domainId,
+          accessKeyId = uuid.v1(),
           recipient1Id = uuid.v1(),
           recipient2Id = uuid.v1();
           
@@ -18,7 +18,7 @@ var initTestData = function(grunt) {
       dao.Domain.create({
          name: "Sample Application",
          env: "Production",
-         externalId: externalId,
+         accessKey: accessKeyId,
          numRecipients: 1,
          numMessages: 0,
          recipients: [recipient1Id, recipient2Id],
@@ -37,16 +37,16 @@ var initTestData = function(grunt) {
             }
          ]
       }).then(function(app) {
-         internalId = app.id;
-         return dao.ExternalApp.create({
-            id: externalId,
-            appId: internalId
+         domainId = app.id;
+         return dao.AccessKey.create({
+            id: accessKeyId,
+            domain: domainId
          });
       }).then(function() {
          return rsvp.all([
             dao.Profile.update({
                id: recipient1Id,
-               domain: internalId,
+               domain: domainId,
                firstName: "Alice",
                lastName: "Doe",
                timeZone: -8,
@@ -67,7 +67,7 @@ var initTestData = function(grunt) {
             }),
             dao.Profile.update({
                id: recipient2Id,
-               domain: internalId,
+               domain: domainId,
                firstName: "Bob",
                lastName: "Doe",
                timeZone: -6,
@@ -82,13 +82,13 @@ var initTestData = function(grunt) {
             })
          ]);
       }).then(function(profiles) {
-         var secretKey = security.generateKey(conf.get("crypto.salts.apikey"), externalId);
+         var secretKey = security.generateKey(conf.get("crypto.salts.apikey"), accessKeyId);
 
-         grunt.log.writeln("\n\nApplication GUID => " + internalId);
+         grunt.log.writeln("\n\nDomain GUID => " + domainId);
          grunt.log.writeln("Alice Doe GUID => " + profiles[0].id);
          grunt.log.writeln("Bob Doe GUID => " + profiles[1].id);
          grunt.log.writeln("API Info:");
-         grunt.log.writeln("   ID => " + externalId );
+         grunt.log.writeln("   ID => " + accessKeyId);
          grunt.log.writeln("   Secret => " + secretKey);
 
          done();
