@@ -21,3 +21,4 @@ node_modules
 _SpecRunner.html
 .grunt/
 docs/api/
+release/
