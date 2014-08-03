@@ -15,7 +15,7 @@ var initTestData = function(grunt) {
           recipient2Id = uuid.v1();
           
       grunt.log.writeln("initializing firebase with sample set of test data");
-      dao.Application.create({
+      dao.Domain.create({
          name: "Sample Application",
          env: "Production",
          externalId: externalId,
