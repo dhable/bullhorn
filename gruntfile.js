@@ -44,8 +44,9 @@ var initTestData = function(grunt) {
          });
       }).then(function() {
          return rsvp.all([
-            dao.Recipient.update(internalId, {
+            dao.Recipient.update({
                id: recipient1Id,
+               domain: internalId,
                firstName: "Alice",
                lastName: "Doe",
                timeZone: -8,
@@ -64,8 +65,9 @@ var initTestData = function(grunt) {
                   }
                ]
             }),
-            dao.Recipient.update(internalId, {
+            dao.Recipient.update({
                id: recipient2Id,
+               domain: internalId,
                firstName: "Bob",
                lastName: "Doe",
                timeZone: -6,
