@@ -2,275 +2,217 @@
 ---
 title: jetway.io Notification Service API
 baseUri: https://api.jetway.io/bullhorn/{version}
-version: v1
+version: v1.0
 
-/applications:
-    /{applicationId}:
-        /key:
-            post:
-                description: |
-                    Generate new API keys for use for the given application. Any existing API keys will be deleted
-                    and cannot be recovered. The API keys can only be retrieved after generation. There is no method
-                    for retrieving the keys after they are created. Make sure that keys are written down in a safe
-                    place.
-                responses:
-                    200:
-                        body:
-                            application/json:
-                                example: |
-                                    {
-                                        "key": "bb31fee30197b98c1f7cd572b29754b1",
-                                        "secret": "20897a05d31d823f9b28791216a1b49dcc7f22e1"
-                                     }
-                    404:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "Application guid is not registered."}
-            delete:
-                description: |
-                    Delete an application's API keys without creating replacement sets. This will prevent any future
-                    API calls from succeeding and can be used to disable an application at the API level.
-                responses:
-                    200:
-                    404:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "Application guid is not registered."}
-        /logs:
-            get:
-                description: |
-                    Fetches API access logs for a given application. This information should be used for debugging
-                    purposes only and not used for billing or checking the status of a notification.
-                queryParameters:
-                    from:
-                        displayName: From
-                        type: number
-                        description:
-                        example: 1401510248
-                        required: false
-                    to:
-                        displayName: to
-                        type: number
-                        description:
-                        example: 1401510248
-                        required: false
-                    status:
-                        displayName: status
-                        type: string
-                        description:
-                        example: success
-                        required: false
-                responses:
-                    200:
-                        body:
-                            application/json:
-                                example: |
-                                    {
-                                        "logs": [
-                                            {
-                                                "timestamp": "",
-                                                "endpoint": "",
-                                                "status": "",
-                                                "requestData": "...",
-                                                "responseData": "..."
-                                            },
-                                            {
-                                                "timestamp": "",
-                                                "endpoint": "",
-                                                "status": "",
-                                                "requestData": "...",
-                                                "responseData": "..."
-                                            },
-                                            {
-                                                "timestamp": "",
-                                                "endpoint": "",
-                                                "status": "",
-                                                "requestData": "...",
-                                                "responseData": "..."
-                                            }
-                                        ]
-                                    }
-                    404:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "Application guid is not registered."}
-        /recipients:
-            post:
-                description: Create new recipient object.
+
+###############################################################################
+### Template Methods
+###############################################################################
+/templates:
+    post:
+        description: |
+            Creates a new template object with blank content. Until the template
+            is uploaded, the template cannot be used in generating a notification.
+        body:
+            application/json:
+                example: |
+                    {
+                        "domain": "996bdce2-1b64-11e4-8e1a-f96d655efa6e",
+                        "type": "sms",
+                        "name": "password-reset"
+                    }
+        response:
+            200:
                 body:
                     application/json:
                         example: |
                             {
-                               "firstName": "John",
-                               "lastName": "Doe",
-                               "timeZone": "-8",
-                               "drains": [
-                                 {
-                                    "type": "sms",
-                                    "for": ["password-reset", "alerts"],
-                                    "addr": "12065551212"
-                                 }
-                               ]
+                                "templateId": "ff025b23-7d18-47fb-be3f-37dcc0bf888d"
                             }
-                responses:
-                    200:
-                        body:
-                            application/json:
-                                example: |
-                                    {"recipient": "e399c87f12a3c817349eeb76241cbb81"}
-                    402:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "You have exceeded the number of recipients for your current plan."}
-                    404:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "The application does not exist or is disabled."}
-            get:
-                description: |
-                    Returns the number of recipients that are currently registered to a given application. This is the
-                    same number that is used when determining your billing plan recipient count.
-                responses:
-                    200:
-                        body:
-                            application/json:
-                                example: |
-                                    {
-                                       "count": 123,
-                                       "recipients": [
-                                          {
-                                             "id": "e399c87f12a3c817349eeb76241cbb81",
-                                             "lastName": "John",
-                                             "firstName": "Doe",
-                                             "timeZone": "-8"
-                                          }
-                                       ]
-                                    }
-                    404:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "The application does not exist or is disabled."}
-            /{recipientId}:
-                get:
-                    description: |
-                        Retrieve the current notification settings for a registered recipient.                        
-                    responses:
-                        200:
-                           body:
-                              application/json:
-                                 example: |
-                                    {
-                                        "firstName": "John",
-                                        "lastName": "Doe",
-                                        "timeZone": "-8",
-                                        "drains": [
-                                          {
-                                             "type": "sms",
-                                             "for": ["password-reset", "alerts"],
-                                             "addr": "12065551212"
-                                          }
-                                       ]
-                                    }
-                        404:
-                            body:
-                                application/json:
-                                    example: |
-                                        {"message": "No recipient registered with that guid."}
-                put:
-                    description: |
-                        Update the details about a recipient.
+    /{templateId}:        
+        post:
+            description: |
+                Update the template content using the body of the request. The body
+                is handled based upon the "type" field specified when the template
+                was created. Every template supports the Handlebars substitution
+                pattern. This version of the API doesn't current support any of the
+                flow control helpers that Handlebars defined.
+            response:
+                200:
+                400:
                     body:
                         application/json:
                             example: |
-                                 {
-                                     "firstName": "John",
-                                     "lastName": "Doe",
-                                     "timeZone": "-8",
-                                     "drains": [
-                                       {
-                                          "type": "sms",
-                                          "for": ["password-reset", "alerts"],
-                                          "addr": "12065551212"
-                                       }
-                                    ]
-                                 }
-                    responses:
-                        200:
-                        404:
-                            body:
-                                application/json:
-                                    example: |
-                                        {"message": "No recipient registered with that guid."}
-                        409: Changes since last fetch.
-                delete:
-                    description: |
-                        Delete a registered recipient from a given application. This will prevent new notifications
-                        from being sent using this recipient but all currently queued, scheduled and in progress notifications
-                        will still be sent to the given recipient.
-                    responses:
-                        200:
-        /notifications:
-            post:
-                description: |
-                    Queue up a new notification to a select group of existing recipients. The notification may not be
-                    sent before the API call returns. Instead the call will result in a unique key for the notification
-                    that can be used later on to query the status of the notification.
+                                {
+                                    "error": "Template contains unsupported substitution variable - ssubject"
+                                }
+        get:
+            description: Returns the template as it was compiled.
 
-                    The call may also fail if the new notification would exceed the your current plan. Upgrading to a higher
-                    plan will correct the problem but you will need to reissue all API calls for failed notifications.
+
+###############################################################################
+### Profile Object Entity Methods
+###############################################################################
+/profiles:
+    post:
+        description: Create a new Profile entity object in Jetway.
+        body:
+            application/json:
+                example: |
+                    {
+                        "domain": "996bdce2-1b64-11e4-8e1a-f96d655efa6e",
+                        "firstName": "Jane",
+                        "lastName": "Doe",
+                        "subscriptions": {
+                            "newsletter": {
+                                "email": "jdoe@gmail.com",
+                                "sms": "12065551212"
+                            },
+                            "password-reset": {
+                                "sms": "12065551212"
+                            }
+                        }
+                    }
+        responses:
+            200:
                 body:
                     application/json:
                         example: |
-                           {
-                              "to": "",
-                              "msg": "",
-                              "subject": "",
-                              "domain": ""
-                           }
-                responses:
-                    202:
-                        body:
-                            application/json:
-                                example: |
-                                    {"notification": "ad6c59bfcb8943b6122c5c0cd6ae6bf5"}                        
-                    402:
-                        body:
-                            application/json:
-                                example: |
-                                    {"message": "You have exceeded the number of notification you can send on your current plan."}
-            /{notificationId}:
-                get:
-                    description: |
-                        Returns the status of the requested notification. The details of the notification are not returned
-                        to protect privacy of the notification.
-                    responses:
-                        200:
-                            body:
-                                application/json:
-                                    example: |
-                                        {
-                                            "status": "queued",
-                                            "created": 1401513902
+                            {
+                                "profileId": "996bdce0-1b64-11e4-8e1a-f96d655efa6e"
+                            }
+            400:
+                body:
+                    application/json:
+                        example: |
+                            {"error": "Required field, domain, is missing."}
+    /{profileId}:
+        get:
+            description: Fetches details about the a given Profile.
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "domain": "996bdce2-1b64-11e4-8e1a-f96d655efa6e",
+                                    "firstName": "Jane",
+                                    "lastName": "Doe",
+                                    "subscriptions": {
+                                        "newsletter": {
+                                            "email": "jdoe@gmail.com",
+                                            "sms": "12065551212"
+                                        },
+                                        "password-reset": {
+                                            "sms": "12065551212"
                                         }
-                        404:
-                            body:
-                                application/json:
-                                    example: |
-                                        {"message": "Notification does not exist."}
-                delete:
-                    description: |
-                        Delete a scheduled or queued notification from being sent. Once a notification has entered the processing
-                        state or has already been sent, it cannot be deleted.
-                    responses:
-                        200:
-                        405:
-                            body:
-                                application/json:
-                                    example: |
-                                        {"message": "Notification has started processing and can no longer be deleted."}
+                                    }
+                                }
+                400:
+                    body:
+                        application/json:
+                            example: |
+                                {"error": "Required field, domain, is missing."}
+                404:
+                    description: There is no Profile object associated with the profileId.
+        put:
+            description: Saves a Profile object with an existing profileId.
+            body:
+                application/json:
+                    example: |
+                        {
+                            "domain": "996bdce2-1b64-11e4-8e1a-f96d655efa6e",
+                            "firstName": "Jane",
+                            "lastName": "Doe",
+                            "subscriptions": {
+                                "newsletter": {
+                                    "email": "jdoe@gmail.com",
+                                    "sms": "12065551212"
+                                },
+                                "password-reset": {
+                                    "sms": "12065551212"
+                                }
+                            }
+                        }
+            responses:
+                200:
+                    description: The save was successful.
+                400:
+                    body:
+                        application/json:
+                            example: |
+                                {"error": "Required field, domain, is missing."}
+        delete:
+            description: |
+                Remove a Profile object from Jetway. This operation cannot be undone. Any pending 
+            responses:
+                200:
+
+
+###############################################################################
+### Notification Object Entity Methods
+###############################################################################
+/notifications:
+    post:
+        description: |
+            Queue up a new notification to a select group of existing recipients. The notification may not be
+            sent before the API call returns. Instead the call will result in a unique key for the notification
+            that can be used later on to query the status of the notification.
+
+            The call may also fail if the new notification would exceed the your current plan. Upgrading to a higher
+            plan will correct the problem but you will need to reissue all API calls for failed notifications.
+        body:
+            application/json:
+                example: |
+                   {
+                      "to": "",
+                      "msg": "",
+                      "subject": "",
+                      "domain": ""
+                   }
+        responses:
+            202:
+                body:
+                    application/json:
+                        example: |
+                            {"notification": "ad6c59bfcb8943b6122c5c0cd6ae6bf5"}
+            400:
+                body:
+                    application/json:
+                        example: |
+                            {"error": "Domain is not defined."}
+            402:
+                body:
+                    application/json:
+                        example: |
+                            {"message": "You have exceeded the number of notification you can send on your current plan."}
+    /{notificationId}:
+        get:
+            description: |
+                Returns the status of the requested notification. The details of the notification are not returned
+                to protect privacy of the notification.
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "status": "queued",
+                                    "created": 1401513902
+                                }
+                404:
+                    body:
+                        application/json:
+                            example: |
+                                {"message": "Notification does not exist."}
+        delete:
+            description: |
+                Delete a scheduled or queued notification from being sent. Once a notification has entered the processing
+                state or has already been sent, it cannot be deleted.
+            responses:
+                200:
+                405:
+                    body:
+                        application/json:
+                            example: |
+                                {"message": "Notification has started processing and can no longer be deleted."}
