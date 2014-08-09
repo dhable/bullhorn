@@ -190,4 +190,52 @@
  
    }); // end of dbDeserializeArray utility function
 
- });
+
+   describe("validate helper function ", function() {
+      var fields = ["firstName", "lastName"];
+
+      it("Should return an error when object parameter is undefined", function() {
+         var actual = common.validate(undefined, ["firstName", "lastName"]);
+         expect(actual).toBeTruthy();
+         expect(actual.message).toBe("object is null or undefined.");
+      });
+
+      it("Should return an error when object parameter is null", function() {
+         var actual = common.validate(null, ["firstName", "lastName"]);
+         expect(actual).toBeTruthy();
+         expect(actual.message).toBe("object is null or undefined.");
+      });
+
+      it("Should return an error when object parameter is not an object", function() {
+         expect(common.validate(true, ["firstName"]).message).toBe("object is not a plain object.");
+         expect(common.validate(1, ["firstName"]).message).toBe("object is not a plain object.");
+         expect(common.validate(1.0, ["firstName"]).message).toBe("object is not a plain object.");
+         expect(common.validate("obj", ["firstName"]).message).toBe("object is not a plain object.");
+         expect(common.validate([], ["firstName"]).message).toBe("object is not a plain object.");
+         expect(common.validate(function(){}, ["firstName"]).message).toBe("object is not a plain object.");
+      });
+
+      it("Should return an error when object contains fields not in the list", function() {
+         var actual = common.validate({firstName: "Dan", lastName: "Hable", foo: 1},
+                                      ["firstName", "lastName"]);
+         expect(actual.message).toBe("object contains additional fields. [foo]");
+      });
+
+      it("Should return an error when object is missing field in the list", function() {
+         var actual = common.validate({firstName: "Dan"}, ["firstName", "lastName"]);
+         expect(actual.message).toBe("object missing required fields. [lastName]");
+      });
+
+      it("Should return falsy value if object contains all fields in the list", function() {
+         var actual = common.validate({firstName: "Dan", lastName: "Hable"},
+                                      ["firstName", "lastName"]);
+         expect(actual).toBeFalsy();
+      });
+
+      it("Should return falsy when object and field list are empty", function() {
+         expect(common.validate({}, [])).toBeFalsy();
+      });
+
+   }); // end of validate utility function
+
+});
