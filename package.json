@@ -21,7 +21,7 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-jasmine-node": "^0.2.1",
-    "grunt-nsp-package": "0.0.4",
+    "grunt-nsp-package": "0.0.5",
     "load-grunt-tasks": "^0.4.0",
     "time-grunt": "^0.3.2"
   },
