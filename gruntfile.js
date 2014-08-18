@@ -1,4 +1,3 @@
-
 var initTestData = function(grunt) {
    var rsvp = require("rsvp"),
        _ = require("lodash"),
@@ -125,7 +124,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("initdb", initTestData(grunt));
   grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
-  grunt.registerTask("release", ["test", "validate-package"]);
+  grunt.registerTask("package", ["test"]);
 
   // alias default to test since that's most likely what we want to do.
   grunt.registerTask("default", ["test"]);
