@@ -3,14 +3,21 @@
  *
  * Copyright (C) 2014 jetway.io. All rights reserved.
  */
-var conf = require("./lib/conf.js"),
-    log = require("./lib/logger.js")("boot");
+var path = require("path"),
+    conf = require("./lib/conf.js"),
+    log = require("./lib/logger.js")("boot"),
+    dependency = require("./lib/dependency");
 
 
 // Log a preamble header to the logging system as a test of the
 // logging system and to show in the logs where a fresh state occured.
 log.info("Bootstrapping jetway.io Bullhorn, version 0.1.0");
 log.info("current working directory = %s", process.cwd());
+
+
+// Load up the dependency store object into a global variable. This way
+// we can have unit test friendly require behavior.
+global.dependencyStore = dependency.load(path.join(__dirname, "lib"));
 
 
 var services = [ 
