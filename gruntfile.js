@@ -17,7 +17,7 @@ var initTestData = function(grunt) {
       dao.Domain.create({
          name: "Sample Application",
          env: "Production",
-         accessKey: accessKeyId,
+         accessKeys: [accessKeyId],
          numRecipients: 1,
          numMessages: 0,
          profiles: [profile1Id, profile2Id],
@@ -29,7 +29,7 @@ var initTestData = function(grunt) {
                urgent: false
             },
             {
-               id: "pwreset",
+               id: "password-reset",
                name: "Password Reset",
                desc: "Notifications sent every time you reset your password.",
                urgent: true
@@ -48,19 +48,15 @@ var initTestData = function(grunt) {
                domain: domainId,
                firstName: "Alice",
                lastName: "Doe",
-               timeZone: -8,
-               drains: [
+               subscriptions: [
                   {
-                     addr: "adoe@gmail.com",
-                     type: "email",
-                     verified: true,
-                     "for": ["pwreset", "newsletter"]
+                     id: "newsletter",
+                     email: "adoe@gmail.com"
                   },
                   {
-                     addr: "12065551212",
-                     type: "sms",
-                     verified: false,
-                     "for": ["pwreset"]
+                     id: "password-reset",
+                     sms: "12065551212",
+                     email: "adoe@gmail.com"
                   }
                ]
             }),
@@ -69,13 +65,10 @@ var initTestData = function(grunt) {
                domain: domainId,
                firstName: "Bob",
                lastName: "Doe",
-               timeZone: -6,
-               drains: [
+               subscriptions: [
                   {
-                     addr: "19175551212",
-                     type: "sms",
-                     verified: true,
-                     "for": ["pwreset"]
+                     id: "password-reset",
+                     sms: "19175551212"
                   }
                ]
             })
