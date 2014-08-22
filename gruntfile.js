@@ -116,8 +116,10 @@ module.exports = function(grunt) {
     },
     copy: {
       app: {
-        {expand: true, src: ["package.json", "app.js"], dest: "dist/"},
-        {expand: true, src: ["lib/", "conf/"], dest: "dist/"}
+        files: [
+          {expand: true, src: ["package.json", "app.js"], dest: "dist/"},
+          {expand: true, src: ["lib/", "conf/"], dest: "dist/"}
+        ]
       }
     }
   });
