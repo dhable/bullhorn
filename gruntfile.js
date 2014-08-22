@@ -126,7 +126,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("initdb", initTestData(grunt));
   grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
-  grunt.registerTask("package", ["copy:application"]);
+  grunt.registerTask("package", ["copy:app"]);
   grunt.registerTask("release", ["clean", "test", "package"]);
 
   // alias default to test since that's most likely what we want to do.
