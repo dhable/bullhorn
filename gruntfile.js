@@ -111,13 +111,21 @@ module.exports = function(grunt) {
     },
     clean: {
       testOutput: ["_SpecRunner.html", "*.log"],
-      generatedDocs: ["docs/bullhorn"]
+      generatedDocs: ["docs/bullhorn"],
+      package: ["dist"]
+    },
+    copy: {
+      app: {
+        {expand: true, src: ["package.json", "app.js"], dest: "dist/"},
+        {expand: true, src: ["lib/", "conf/"], dest: "dist/"}
+      }
     }
   });
 
   grunt.registerTask("initdb", initTestData(grunt));
   grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
-  grunt.registerTask("package", ["test"]);
+  grunt.registerTask("package", ["copy:application"]);
+  grunt.registerTask("release", ["clean", "test", "package"]);
 
   // alias default to test since that's most likely what we want to do.
   grunt.registerTask("default", ["test"]);
