@@ -118,7 +118,25 @@ module.exports = function(grunt) {
       app: {
         files: [
           {expand: true, src: ["package.json", "app.js"], dest: "dist/"},
-          {expand: true, src: ["lib/", "conf/"], dest: "dist/"}
+          {expand: true, src: ["lib/**", "conf/**"], dest: "dist/"}
+        ]
+      }
+    },
+    exec: {
+      dist_npm_install: {
+        cwd: "dist/",
+        cmd: "npm install --production"
+      }
+    },
+    compress: {
+      app: {
+        options: {
+          mode: "tgz",
+          pretty: true,
+          archive: "bullhorn.tgz"
+        },
+        files: [
+          {expand: true, cwd: "dist/", src: ["**/*"], dest: "bullhorn"}
         ]
       }
     }
@@ -126,7 +144,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask("initdb", initTestData(grunt));
   grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
-  grunt.registerTask("package", ["copy:app"]);
+  grunt.registerTask("package", ["copy:app", "exec:dist_npm_install", "compress:app"]);
   grunt.registerTask("release", ["clean", "test", "package"]);
 
   // alias default to test since that's most likely what we want to do.

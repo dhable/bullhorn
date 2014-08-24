@@ -22,3 +22,5 @@ _SpecRunner.html
 .grunt/
 docs/api/
 release/
+dist/
+bullhorn.tgz
