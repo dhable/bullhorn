@@ -112,7 +112,7 @@ module.exports = function(grunt) {
     clean: {
       testOutput: ["_SpecRunner.html", "*.log"],
       generatedDocs: ["docs/bullhorn"],
-      package: ["dist"]
+      package: ["dist", "bullhorn.tgz"]
     },
     copy: {
       app: {
