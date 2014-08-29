@@ -205,14 +205,3 @@ version: v1.0
                         application/json:
                             example: |
                                 {"message": "Notification does not exist."}
-        delete:
-            description: |
-                Delete a scheduled or queued notification from being sent. Once a notification has entered the processing
-                state or has already been sent, it cannot be deleted.
-            responses:
-                200:
-                405:
-                    body:
-                        application/json:
-                            example: |
-                                {"message": "Notification has started processing and can no longer be deleted."}
