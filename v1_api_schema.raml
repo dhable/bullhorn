@@ -165,10 +165,15 @@ version: v1.0
             application/json:
                 example: |
                    {
-                      "to": "",
-                      "msg": "",
-                      "subject": "",
-                      "domain": ""
+                      "recipient": {
+                          "profile": "",
+                          "channel": "newsletter"
+                      },                      
+                      "template": "default",
+                      "params": {
+                          "subject": "Check Out What's New",
+                          "body": "Look at the new features we added ..."
+                      }
                    }
         responses:
             202:
@@ -180,25 +185,18 @@ version: v1.0
                 body:
                     application/json:
                         example: |
-                            {"error": "Domain is not defined."}
-            402:
-                body:
-                    application/json:
-                        example: |
-                            {"message": "You have exceeded the number of notification you can send on your current plan."}
+                            {"error": "Profile is not defined."}
     /{notificationId}:
         get:
-            description: |
-                Returns the status of the requested notification. The details of the notification are not returned
-                to protect privacy of the notification.
+            description: Returns the status of the requested notification.
             responses:
                 200:
                     body:
                         application/json:
                             example: |
                                 {
-                                    "status": "queued",
-                                    "created": 1401513902
+                                    "status": "success",
+                                    "processed": 1409338111                                    
                                 }
                 404:
                     body:
