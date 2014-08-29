@@ -125,7 +125,7 @@ module.exports = function(grunt) {
     exec: {
       dist_npm_install: {
         cwd: "dist/",
-        cmd: "npm install --production"
+        cmd: "npm install --production --no-optional"
       }
     },
     compress: {
