@@ -44,12 +44,12 @@ services.forEach(function(service) {
 
 
 process.once("SIGINT", function() {
-   try {
-      services.forEach(function(service) {
+   services.forEach(function(service) {
+      try {
          service.stop();
-      });
-   }
-   catch(err) {
-      // eat the error
-   }
+      }
+      catch(ex) { 
+         log.warn("failed to shutdown service %s: %s", service.name, ex);
+      }
+   });
 });
