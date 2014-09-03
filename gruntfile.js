@@ -112,7 +112,7 @@ module.exports = function(grunt) {
     clean: {
       testOutput: ["_SpecRunner.html", "*.log"],
       generatedDocs: ["docs/bullhorn"],
-      package: ["dist", "bullhorn.tgz"]
+      package: ["dist", "*.tar.gz"]
     },
     copy: {
       app: {
@@ -133,7 +133,7 @@ module.exports = function(grunt) {
         options: {
           mode: "tgz",
           pretty: true,
-          archive: "bullhorn.tgz"
+          archive: "bullhorn-<%= pkg.version %>.tar.gz"
         },
         files: [
           {expand: true, cwd: "dist/", src: ["**/*"], dest: "bullhorn"}
