@@ -99,10 +99,11 @@ module.exports = function(grunt) {
   require("time-grunt")(grunt);
 
 
-  var source = ["*.js", "lib/**/*.js", "spec/**/*.js", "package.json", "conf/*.json"];
+  var source = ["*.js", "lib/**/*.js", "spec/**/*.js", "package.json", "conf/*.json"],
+      packageData = grunt.file.readJSON("package.json");
   
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: packageData,
     jshint: {
       src: source
     },
@@ -133,7 +134,15 @@ module.exports = function(grunt) {
         options: {
           mode: "tgz",
           pretty: true,
-          archive: "bullhorn-<%= pkg.version %>.tar.gz"
+          archive: function() {
+             var name = packageData.name + "_" + packageData.version;
+
+             if(grunt.option("buildNumber")) {
+                name = name + "-" + grunt.option("buildNumber");
+             }
+
+             return name + ".tar.gz";
+          }
         },
         files: [
           {expand: true, cwd: "dist/", src: ["**/*"], dest: "bullhorn"}
