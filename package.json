@@ -1,6 +1,6 @@
 {
   "name": "bullhorn",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "Real-time notification dispatch server for the web.",
   "private": true,
   "main": "app.js",
@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://bitbucket.org/jetwayio/bullhorn/issues"
   },
-  "homepage": "https://bitbucket.org/jetwayio/bullhorn://bitbucket.org/jetwayio/bullhorn",
+  "homepage": "https://bitbucket.org/jetwayio/bullhorn",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
