@@ -100,10 +100,12 @@ module.exports = function(grunt) {
 
 
   var source = ["*.js", "lib/**/*.js", "spec/**/*.js", "package.json", "conf/*.json"],
-      packageData = grunt.file.readJSON("package.json");
+      pkgJSON = grunt.file.readJSON("package.json"),
+      buildVer = pkgJSON.version + (grunt.option("buildNumber") ? "-" + grunt.option("buildNumber") : "");
   
   grunt.initConfig({
-    pkg: packageData,
+    pkg: pkgJSON,
+    ver: buildVer,
     jshint: {
       src: source
     },
@@ -120,7 +122,19 @@ module.exports = function(grunt) {
         files: [
           {expand: true, src: ["package.json", "app.js"], dest: "dist/"},
           {expand: true, src: ["lib/**", "conf/**"], dest: "dist/"}
-        ]
+        ],
+        options: {
+           process: function(content, srcpath) {
+              if(srcpath === "package.json") {
+                 var distPkg = JSON.parse(content);
+                 distPkg.version = buildVer;
+                 return JSON.stringify(distPkg, null, "\t");
+              }
+              else {
+                 return content;
+              }
+           }
+        }
       }
     },
     exec: {
@@ -134,15 +148,7 @@ module.exports = function(grunt) {
         options: {
           mode: "tgz",
           pretty: true,
-          archive: function() {
-             var name = packageData.name + "_" + packageData.version;
-
-             if(grunt.option("buildNumber")) {
-                name = name + "-" + grunt.option("buildNumber");
-             }
-
-             return name + ".tar.gz";
-          }
+          archive: "<%= pkg.name %>_<%= ver %>.tar.gz"
         },
         files: [
           {expand: true, cwd: "dist/", src: ["**/*"], dest: "bullhorn"}
