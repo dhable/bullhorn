@@ -2,6 +2,28 @@
 
 Real-time notification dispatcher written in node.js
 
+Bullhorn was developed as a subcomponent for a devops tool that the team at Jetway was
+building. Since pivoting in a new direction, we decided to open source the notification
+component for others to use or build off of.
+
+The code is provided as is. Drop us a note if you would like to contract some engineering 
+time to help use this code base in your product.
+
+
+## Dependencies ##
+
+To work with the code, you'll need
+
+* node.js 0.10.x
+* VirtualBox
+* Vagrant
+* grunt-cli
+
+We also used Firebase as the backend database for our service. If you do not want to use
+Firebase, you'll need to rip out the lib/dao/*.js modules and replace them with some other
+backing data source.
+
+
 ## Running The Service ##
 
 To run the service locally in a production like environment, you'll need to
@@ -32,14 +54,8 @@ vagrant destroy
 ## ReST API ##
 
 Documentation for the ReST API has moved to a RAML schema. See ```v1_api_schema.raml``` for
-the lastest documentation.
-
-Why?
-
-Well now that this API is going to be publically facing, I made the decision to use RAML as
-a way of documenting the ReST API. This tool takes in a YAML style document with some rules
-and can produce HTML output that we can publish on our website. The README.md technique works
-well for internal documentation and internal APIs will continue to be documented in this manner.
+the lastest documentation. This document is probably incomplete as we made chanegs to the API
+without touching the code. It should provide an idea of the ReST API.
 
 
 ## License ##
