@@ -9,15 +9,15 @@
     "retentionLength": 300
   },
   "sms": {
-    "shortCode": "+16202704254"
+    "shortCode": ""
   },
   "email": {
     "from": "notification@jetway.io"
   },
   "twilio": {
-    "accountSid": "AC259b6c3ba019fe68d38eda2f66acab62"
+    "accountSid": ""
   },
   "sendgrid": {
-    "user": "dhable"
+    "user": ""
   }
 }

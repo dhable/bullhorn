@@ -4,9 +4,9 @@
 // local files.
 {
   "twilio": {
-    "authToken": "9549fcb1885ed8e6ac0d448dc0f30a1a"
+    "authToken": ""
   },
   "sendgrid": {
-    "key": "p8OQux5lK3t4W2ttRsgiDMtxMA"
+    "key": ""
   }
 }
