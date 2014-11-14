@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Bullhorn: Get your message heard
+#
+# Copyright (C) 2014
+# Licensed under the GNU Lesser General Public License v3
+
 
 # Snippet of shell commands used to install a current version of node.js
 # using apt-get. Extra work is needed due to the official apt repo being

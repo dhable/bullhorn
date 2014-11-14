@@ -1,7 +1,8 @@
 /*
  * Bullhorn: Get your message heard
  *
- * Copyright (C) 2014 jetway.io. All rights reserved.
+ * Copyright (C) 2014
+ * Licensed under the GNU Lesser General Public License v3
  */
 var path = require("path"),
     conf = require("./lib/conf.js"),

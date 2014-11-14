@@ -1,3 +1,9 @@
+/*
+ * Bullhorn: Get your message heard
+ *
+ * Copyright (C) 2014
+ * Licensed under the GNU Lesser General Public License v3
+ */
 var security = require("../lib/security");
 
 

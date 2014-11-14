@@ -40,3 +40,9 @@ Well now that this API is going to be publically facing, I made the decision to 
 a way of documenting the ReST API. This tool takes in a YAML style document with some rules
 and can produce HTML output that we can publish on our website. The README.md technique works
 well for internal documentation and internal APIs will continue to be documented in this manner.
+
+
+## License ##
+
+This project is open sourced under the GNU LESSER GENERAL PUBLIC LICENSE. A copy of the
+license is provided in the LICENSE file.

@@ -9,12 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:jetwayio/bullhorn.git"
+    "url": "git@github.com:dhable/bullhorn.git"
   },
-  "bugs": {
-    "url": "https://bitbucket.org/jetwayio/bullhorn/issues"
-  },
-  "homepage": "https://bitbucket.org/jetwayio/bullhorn",
+  "license": "LGPL-3.0",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
