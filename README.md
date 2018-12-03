@@ -9,6 +9,7 @@ component for others to use or build off of.
 The code is provided as is. Drop us a note if you would like to contract some engineering 
 time to help use this code base in your product.
 
+__This project is no longer maintained.__
 
 ## Dependencies ##
 
